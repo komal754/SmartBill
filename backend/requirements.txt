@@ -1,6 +1,7 @@
-httpx
 setuptools
 wheel
+httpx
+asyncpg
 absl-py==1.2.0
 annotated-types==0.7.0
 anyio==4.9.0
