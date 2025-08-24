@@ -1,3 +1,4 @@
+httpx
 setuptools
 wheel
 absl-py==1.2.0
