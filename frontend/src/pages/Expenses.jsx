@@ -189,6 +189,8 @@ function Expenses() {
     }
   }
 
+  // Properly define handleSubmit for form submission
+  function handleSubmit(e) {
     e.preventDefault();
     if (!form.date || !form.category || !form.amount) return;
     setSubmitting(true);
@@ -705,6 +707,7 @@ function Expenses() {
       </div>
     </>
   );
+}
 }
 
 export default Expenses;
