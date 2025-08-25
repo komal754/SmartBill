@@ -69,7 +69,6 @@ type Expense struct {
 
 // MarshalJSON for Expense to format Date as YYYY-MM-DD using encoding/json
 func (e Expense) MarshalJSON() ([]byte, error) {
-	type Alias Expense
 	return json.Marshal(&struct {
 		ID            int     `json:"id"`
 		UserID        int     `json:"user_id"`
@@ -103,7 +102,6 @@ type Payment struct {
 
 // MarshalJSON for Payment to format PaymentDate as YYYY-MM-DD and handle nullable ExpenseID, Category, Description
 func (p Payment) MarshalJSON() ([]byte, error) {
-	type Alias Payment
 	var expenseID interface{}
 	if p.ExpenseID != nil {
 		expenseID = *p.ExpenseID
@@ -233,7 +231,9 @@ func main() {
 		}
 		// Call Python AI service (assumes running at http://localhost:8001/categorize)
 		aiReqBody := []byte(fmt.Sprintf(`{"description": %q}`, req.Description))
+		//% resp, err := http.Post("http://localhost:8001/categorize", "application/json", bytes.NewBuffer(aiReqBody))
 		resp, err := http.Post("http://localhost:8001/categorize", "application/json", bytes.NewBuffer(aiReqBody))
+
 		if err != nil || resp.StatusCode != 200 {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "AI service unavailable"})
 			return

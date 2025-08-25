@@ -28,7 +28,7 @@ function ConfirmModal({ open, onConfirm, onCancel, message }) {
       </div>
     </div>
   );
-}
+// ...existing code...
 
 
 
@@ -102,9 +102,11 @@ function Expenses() {
     setForm(f => ({ ...f, category: cat }));
   }
 
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
+  const FASTAPI_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const token = localStorage.getItem('token');
-    fetch('/api/expenses', {
+    fetch(`${API_URL}/api/expenses`, {
       headers: {
         'Authorization': token ? `Bearer ${token}` : undefined
       }
@@ -118,9 +120,8 @@ function Expenses() {
         if (!res.ok) throw new Error('Failed to fetch expenses');
         return res.json();
       })
-      .then(data => {
-        const arr = Array.isArray(data) ? data : [];
-        setExpenses(arr);
+      .then(arr => {
+        setExpenses(Array.isArray(arr) ? arr : []);
         // Calculate summary for current month
         const now = new Date();
         const month = now.getMonth() + 1;
@@ -148,7 +149,7 @@ function Expenses() {
         setLoading(false);
       })
       .catch(err => {
-  toast.error(err.message);
+        toast.error(err.message);
         setLoading(false);
       });
   }, [refreshKey]);
@@ -160,12 +161,11 @@ function Expenses() {
     setForm(prev => ({ ...prev, [name]: value }));
 
     if (name === 'description') {
-      // Debounce API call
       if (descTypingTimeout) clearTimeout(descTypingTimeout);
       if (value.length > 2) {
         const timeout = setTimeout(async () => {
           try {
-            const res = await fetch('/api/ai/categorize', {
+            const res = await fetch(`${FASTAPI_URL}/api/ai/categorize`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ description: value })
@@ -174,7 +174,6 @@ function Expenses() {
               const data = await res.json();
               setSuggestedCategory(data.category);
               setSuggestionConfidence(data.confidence);
-              // Auto-fill category if user hasn't typed it
               setForm(prev => prev.category ? prev : { ...prev, category: data.category });
             } else {
               setSuggestedCategory('');
@@ -190,13 +189,11 @@ function Expenses() {
     }
   }
 
-  function handleSubmit(e) {
     e.preventDefault();
     if (!form.date || !form.category || !form.amount) return;
     setSubmitting(true);
-  // No-op: handled by toast
     const token = localStorage.getItem('token');
-    fetch('/api/expenses', {
+    fetch(`${API_URL}/api/expenses`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -211,9 +208,9 @@ function Expenses() {
       .then(newExpense => {
         setExpenses(prev => [...prev, newExpense]);
         setForm({ date: '', category: '', amount: '', description: '' });
-  toast.success('Expense added successfully!');
+        toast.success('Expense added successfully!');
       })
-  .catch(err => toast.error(err.message))
+      .catch(err => toast.error(err.message))
       .finally(() => setSubmitting(false));
   }
 
@@ -236,7 +233,7 @@ function Expenses() {
   function confirmDelete() {
     if (!deleteId) return;
     const token = localStorage.getItem('token');
-    fetch(`/api/expenses/${deleteId}`, {
+  fetch(`${API_URL}/api/expenses/${deleteId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': token ? `Bearer ${token}` : undefined
@@ -283,7 +280,7 @@ function Expenses() {
       amount: parseFloat(editAmount),
       description: editDescription
     };
-    fetch(`/api/expenses/${id}`, {
+  fetch(`${API_URL}/api/expenses/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -325,7 +322,7 @@ function Expenses() {
     await loadRazorpayScript();
 
     // Create order on backend
-    const res = await fetch('/api/razorpay/order', {
+  const res = await fetch(`${API_URL}/api/razorpay/order`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -350,7 +347,7 @@ function Expenses() {
       handler: function (response) {
   toast.success('Payment successful! Payment ID: ' + response.razorpay_payment_id);
         // Record payment in backend
-        fetch('/api/payments', {
+  fetch(`${API_URL}/api/payments`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -385,7 +382,7 @@ function Expenses() {
   function handleMarkAsPaid(exp) {
     if (!window.confirm('Mark this expense as paid (manual/external payment)?')) return;
     const token = localStorage.getItem('token');
-    fetch('/api/payments', {
+  fetch(`${API_URL}/api/payments`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

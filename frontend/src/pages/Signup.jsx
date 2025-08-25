@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,7 +22,7 @@ export default function Signup() {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch("/api/register", {
+      const res = await fetch(`${API_URL}/api/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -45,7 +46,7 @@ export default function Signup() {
     setOTPLoading(true);
     setOTPSuccess("");
     try {
-      const res = await fetch("/api/verify-otp", {
+      const res = await fetch(`${API_URL}/api/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: form.email, otp }),
@@ -147,7 +148,7 @@ export default function Signup() {
                 setOTPSuccess("");
                 setOTPLoading(true);
                 try {
-                  const res = await fetch("/api/resend-otp", {
+                  const res = await fetch(`${API_URL}/api/resend-otp`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email: form.email }),

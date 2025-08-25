@@ -3,6 +3,10 @@ import { useState } from 'react';
 export default function UploadReceipt() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const [uploadSuccess, setUploadSuccess] = useState("");
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
 
   function handleFileChange(e) {
     const selected = e.target.files[0];
@@ -14,11 +18,36 @@ export default function UploadReceipt() {
     }
   }
 
-  function handleUpload(e) {
+  async function handleUpload(e) {
     e.preventDefault();
+    setUploadError("");
+    setUploadSuccess("");
     if (!file) return;
-    // TODO: Integrate with backend API for actual upload
-    alert('File ready to upload: ' + file.name);
+    setUploading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch(`${API_URL}/api/upload-receipt`, {
+        method: 'POST',
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : undefined
+        },
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setUploadError(data.error || 'Upload failed');
+      } else {
+        setUploadSuccess('Receipt uploaded successfully!');
+        setFile(null);
+        setPreview(null);
+      }
+    } catch (err) {
+      setUploadError('Network error');
+    } finally {
+      setUploading(false);
+    }
   }
 
   return (
@@ -32,8 +61,10 @@ export default function UploadReceipt() {
         {file && !preview && (
           <div className="text-gray-500">PDF selected: {file.name}</div>
         )}
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50" disabled={!file}>
-          Upload
+        {uploadError && <div className="text-red-600 text-center">{uploadError}</div>}
+        {uploadSuccess && <div className="text-green-600 text-center">{uploadSuccess}</div>}
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50" disabled={!file || uploading}>
+          {uploading ? 'Uploading...' : 'Upload'}
         </button>
       </form>
     </div>

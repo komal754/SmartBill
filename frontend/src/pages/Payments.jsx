@@ -84,10 +84,12 @@ export default function Payments() {
     };
   }
 
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const FASTAPI_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const token = localStorage.getItem('token');
     setLoading(true);
-    fetch('/api/payments', {
+    fetch(`${BACKEND_URL}/api/payments`, {
       headers: {
         'Authorization': token ? `Bearer ${token}` : undefined
       }
@@ -136,7 +138,7 @@ export default function Payments() {
   function refetchPayments() {
     const token = localStorage.getItem('token');
     setLoading(true);
-    fetch('/api/payments', {
+  fetch(`${BACKEND_URL}/api/payments`, {
       headers: {
         'Authorization': token ? `Bearer ${token}` : undefined
       }
@@ -169,7 +171,7 @@ export default function Payments() {
       return;
     }
     setEditSaving(true);
-    fetch(`/api/payments/${id}`, {
+  fetch(`${BACKEND_URL}/api/payments/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -215,7 +217,7 @@ export default function Payments() {
     if (!deleteId) return;
     setActionLoading(true);
     const token = localStorage.getItem('token');
-    fetch(`/api/payments/${deleteId}`, {
+  fetch(`${BACKEND_URL}/api/payments/${deleteId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': token ? `Bearer ${token}` : undefined
@@ -241,7 +243,7 @@ export default function Payments() {
       if (value.length > 2) {
         const timeout = setTimeout(async () => {
           try {
-            const res = await fetch('/api/ai/categorize', {
+            const res = await fetch(`${FASTAPI_URL}/api/ai/categorize`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ description: value })
@@ -274,7 +276,7 @@ export default function Payments() {
     }
     setCreating(true);
     const token = localStorage.getItem('token');
-    fetch('/api/payments', {
+  fetch(`${BACKEND_URL}/api/payments`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -325,7 +327,7 @@ export default function Payments() {
       toast.error('Failed to load Razorpay. Please try again.');
       return;
     }
-    const res = await fetch('/api/razorpay/order', {
+  const res = await fetch(`${BACKEND_URL}/api/razorpay/order`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -347,7 +349,7 @@ export default function Payments() {
       description: 'Payment',
       handler: function (response) {
         toast.success('Payment successful! Payment ID: ' + response.razorpay_payment_id);
-        fetch('/api/payments', {
+  fetch(`${BACKEND_URL}/api/payments`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

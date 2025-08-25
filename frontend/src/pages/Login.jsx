@@ -27,7 +27,7 @@ export default function Login() {
     setShowResend(false);
     setResendSuccess("");
     try {
-      const res = await fetch("/api/login", {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -100,7 +100,7 @@ export default function Login() {
               setError("");
               setResendLoading(true);
               try {
-                const res = await fetch("/api/resend-otp", {
+                const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/resend-otp`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ email: resendEmail }),
@@ -131,7 +131,7 @@ export default function Login() {
               setOTPLoading(true);
               setOTPSuccess("");
               try {
-                const res = await fetch("/api/verify-otp", {
+                const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/verify-otp`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ email: resendEmail, otp }),

@@ -3,6 +3,7 @@ import { FaPencilAlt } from 'react-icons/fa';
 
 
 export default function BudgetSettings({ budget, setBudget }) {
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
   const [input, setInput] = useState(budget);
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -15,7 +16,7 @@ export default function BudgetSettings({ budget, setBudget }) {
       setError(null);
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('/api/user/budget', {
+  const res = await fetch(`${API_URL}/api/user/budget`, {
           headers: { 'Authorization': token ? `Bearer ${token}` : undefined }
         });
         if (!res.ok) throw new Error('Failed to fetch budget');
@@ -37,7 +38,7 @@ export default function BudgetSettings({ budget, setBudget }) {
     setError(null);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/user/budget', {
+  const res = await fetch(`${API_URL}/api/user/budget`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

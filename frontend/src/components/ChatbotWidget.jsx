@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 
 export default function ChatbotWidget() {
+  const API_URL = import.meta.env.VITE_API_URL;
   // Quick reply options
   const quickReplies = [
     "Show my spending this month",
@@ -48,7 +49,7 @@ export default function ChatbotWidget() {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
     try {
-      const res = await fetch('/api/chatbot', {
+  const res = await fetch(`${API_URL}/api/chatbot`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: input }),

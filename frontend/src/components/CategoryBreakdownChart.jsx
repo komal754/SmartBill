@@ -10,13 +10,14 @@ import {
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function CategoryBreakdownChart() {
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
   const [categoryChart, setCategoryChart] = useState({ labels: [], data: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchExpenses() {
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/expenses', {
+  const res = await fetch(`${API_URL}/api/expenses`, {
         headers: { 'Authorization': token ? `Bearer ${token}` : undefined }
       });
       const arr = await res.json();
