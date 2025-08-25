@@ -20,7 +20,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
-
+	"github.com/gin-contrib/cors" 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -221,6 +221,7 @@ func main() {
 	}
 
 	r := gin.Default()
+	r.Use(cors.Default())
 	// AI Categorization endpoint (calls external Python AI microservice)
 	r.POST("/api/ai/categorize", func(c *gin.Context) {
 		var req struct {
