@@ -17,6 +17,8 @@ export default function BudgetSettings({ budget, setBudget }) {
       try {
         const token = localStorage.getItem('token');
   const res = await fetch(`${API_URL}/api/user/budget`, {
+  // const res = await fetch(`/api/user/budget`, {
+
           headers: { 'Authorization': token ? `Bearer ${token}` : undefined }
         });
         if (!res.ok) throw new Error('Failed to fetch budget');
@@ -39,6 +41,8 @@ export default function BudgetSettings({ budget, setBudget }) {
     try {
       const token = localStorage.getItem('token');
   const res = await fetch(`${API_URL}/api/user/budget`, {
+  // const res = await fetch(`/api/user/budget`, {
+
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

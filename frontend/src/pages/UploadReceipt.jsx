@@ -29,6 +29,8 @@ export default function UploadReceipt() {
       const formData = new FormData();
       formData.append('file', file);
       const res = await fetch(`${API_URL}/api/upload-receipt`, {
+      // const res = await fetch(`/api/upload-receipt`, {
+
         method: 'POST',
         headers: {
           'Authorization': token ? `Bearer ${token}` : undefined

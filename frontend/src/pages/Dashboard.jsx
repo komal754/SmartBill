@@ -150,6 +150,8 @@ export default function Dashboard() {
     async function fetchSummary() {
       const token = localStorage.getItem('token');
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/expenses`, {
+      // const res = await fetch(`/api/expenses`, {
+
         headers: { 'Authorization': token ? `Bearer ${token}` : undefined }
       });
       const arr = await res.json();

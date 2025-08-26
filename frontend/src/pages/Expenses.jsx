@@ -31,7 +31,7 @@ function ConfirmModal({ open, onConfirm, onCancel, message }) {
 // ...existing code...
 
 
-
+}
 // Razorpay script loader
 function loadRazorpayScript() {
   return new Promise((resolve) => {
@@ -107,6 +107,8 @@ function Expenses() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     fetch(`${API_URL}/api/expenses`, {
+    // fetch(`/api/expenses`, {
+
       headers: {
         'Authorization': token ? `Bearer ${token}` : undefined
       }
@@ -166,6 +168,8 @@ function Expenses() {
         const timeout = setTimeout(async () => {
           try {
             const res = await fetch(`${FASTAPI_URL}/api/ai/categorize`, {
+            // const res = await fetch(`/api/ai/categorize`, {
+
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ description: value })
@@ -196,6 +200,8 @@ function Expenses() {
     setSubmitting(true);
     const token = localStorage.getItem('token');
     fetch(`${API_URL}/api/expenses`, {
+    // fetch(`/api/expenses`, {
+
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -236,6 +242,8 @@ function Expenses() {
     if (!deleteId) return;
     const token = localStorage.getItem('token');
   fetch(`${API_URL}/api/expenses/${deleteId}`, {
+  // fetch(`/api/expenses/${deleteId}`, {
+
       method: 'DELETE',
       headers: {
         'Authorization': token ? `Bearer ${token}` : undefined
@@ -283,6 +291,8 @@ function Expenses() {
       description: editDescription
     };
   fetch(`${API_URL}/api/expenses/${id}`, {
+  // fetch(`/api/expenses/${id}`, {
+
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -300,7 +310,8 @@ function Expenses() {
           } catch {}
           // Also log request body for developer
           // eslint-disable-next-line no-console
-          console.error('PUT /api/expenses/', id, body);
+          console.error(`PUT ${API_URL}/api/expenses/`, id, body);
+
           throw new Error(msg);
         }
         return res.json();
@@ -325,6 +336,8 @@ function Expenses() {
 
     // Create order on backend
   const res = await fetch(`${API_URL}/api/razorpay/order`, {
+  // const res = await fetch(`/api/razorpay/order`, {
+
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -350,6 +363,8 @@ function Expenses() {
   toast.success('Payment successful! Payment ID: ' + response.razorpay_payment_id);
         // Record payment in backend
   fetch(`${API_URL}/api/payments`, {
+  // fetch(`/api/payments`, {
+
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -385,6 +400,8 @@ function Expenses() {
     if (!window.confirm('Mark this expense as paid (manual/external payment)?')) return;
     const token = localStorage.getItem('token');
   fetch(`${API_URL}/api/payments`, {
+  // fetch(`/api/payments`, {
+
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -708,5 +725,5 @@ function Expenses() {
     </>
   );
 }
-}
+
 export default Expenses;

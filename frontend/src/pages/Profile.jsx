@@ -18,8 +18,10 @@ export default function Profile() {
       return;
     }
     Promise.all([
-      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/me`, { headers: { 'Authorization': `Bearer ${token}` } }),
-      fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/budget`, { headers: { 'Authorization': `Bearer ${token}` } })
+       fetch(`${import.meta.env.VITE_BACKEND_URL}/api/me`, { headers: { 'Authorization': `Bearer ${token}` } }),
+       fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/budget`, { headers: { 'Authorization': `Bearer ${token}` } })
+      //       fetch(`/api/me`, { headers: { 'Authorization': `Bearer ${token}` } }),
+      // fetch(`/api/user/budget`, { headers: { 'Authorization': `Bearer ${token}` } })
     ])
       .then(async ([userRes, budgetRes]) => {
         if (!userRes.ok) throw new Error('Failed to fetch user info');
@@ -63,6 +65,8 @@ export default function Profile() {
       if (form.password) body.password = form.password;
       if (Object.keys(body).length > 0) {
   const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/me`, {
+  // const res = await fetch(`/api/me`, {
+
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
           body: JSON.stringify(body)
@@ -74,6 +78,8 @@ export default function Profile() {
       if (form.budget !== user.budget) {
         setBudgetLoading(true);
   const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/budget`, {
+  // const res = await fetch(`/api/user/budget`, {
+
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
           body: JSON.stringify({ budget: parseFloat(form.budget) })

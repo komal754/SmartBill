@@ -18,6 +18,8 @@ export default function CategoryBreakdownChart() {
     async function fetchExpenses() {
       const token = localStorage.getItem('token');
   const res = await fetch(`${API_URL}/api/expenses`, {
+  // const res = await fetch(`/api/expenses`, {
+
         headers: { 'Authorization': token ? `Bearer ${token}` : undefined }
       });
       const arr = await res.json();

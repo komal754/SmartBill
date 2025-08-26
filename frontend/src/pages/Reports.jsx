@@ -72,8 +72,10 @@ export default function Reports() {
       const token = localStorage.getItem('token');
   const API_URL = import.meta.env.VITE_BACKEND_URL;
       const [expRes, payRes] = await Promise.all([
-        fetch(`${API_URL}/api/expenses`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } }),
-        fetch(`${API_URL}/api/payments`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } })
+         fetch(`${API_URL}/api/expenses`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } }),
+         fetch(`${API_URL}/api/payments`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } })
+        //         fetch(`/api/expenses`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } }),
+        // fetch(`/api/payments`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } })
       ]);
       const expArr = await expRes.json();
       const payArr = await payRes.json();

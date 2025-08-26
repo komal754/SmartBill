@@ -50,6 +50,8 @@ export default function ChatbotWidget() {
     const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
     try {
   const res = await fetch(`${API_URL}/api/chatbot`, {
+  // const res = await fetch(`/api/chatbot`, {
+
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: input }),

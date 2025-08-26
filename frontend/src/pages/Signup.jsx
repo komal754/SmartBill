@@ -23,6 +23,8 @@ export default function Signup() {
     setLoading(true);
     try {
       const res = await fetch(`${API_URL}/api/register`, {
+      // const res = await fetch(`/api/register`, {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -47,6 +49,8 @@ export default function Signup() {
     setOTPSuccess("");
     try {
       const res = await fetch(`${API_URL}/api/verify-otp`, {
+      // const res = await fetch(`/api/verify-otp`, {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: form.email, otp }),
@@ -149,6 +153,8 @@ export default function Signup() {
                 setOTPLoading(true);
                 try {
                   const res = await fetch(`${API_URL}/api/resend-otp`, {
+                  // const res = await fetch(`/api/resend-otp`, {
+
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email: form.email }),

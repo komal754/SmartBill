@@ -28,6 +28,8 @@ export default function Login() {
     setResendSuccess("");
     try {
   const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/login`, {
+  // const res = await fetch(`/api/login`, {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

@@ -90,6 +90,8 @@ export default function Payments() {
     const token = localStorage.getItem('token');
     setLoading(true);
     fetch(`${BACKEND_URL}/api/payments`, {
+    // fetch(`/api/payments`, {
+
       headers: {
         'Authorization': token ? `Bearer ${token}` : undefined
       }
@@ -139,6 +141,8 @@ export default function Payments() {
     const token = localStorage.getItem('token');
     setLoading(true);
   fetch(`${BACKEND_URL}/api/payments`, {
+  // fetch(`/api/payments`, {
+
       headers: {
         'Authorization': token ? `Bearer ${token}` : undefined
       }
@@ -172,6 +176,8 @@ export default function Payments() {
     }
     setEditSaving(true);
   fetch(`${BACKEND_URL}/api/payments/${id}`, {
+  // fetch(`/api/payments/${id}`, {
+
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -218,6 +224,8 @@ export default function Payments() {
     setActionLoading(true);
     const token = localStorage.getItem('token');
   fetch(`${BACKEND_URL}/api/payments/${deleteId}`, {
+  // fetch(`/api/payments/${deleteId}`, {
+
       method: 'DELETE',
       headers: {
         'Authorization': token ? `Bearer ${token}` : undefined
@@ -244,6 +252,8 @@ export default function Payments() {
         const timeout = setTimeout(async () => {
           try {
             const res = await fetch(`${FASTAPI_URL}/api/ai/categorize`, {
+            // const res = await fetch(`/api/ai/categorize`, {
+
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ description: value })
@@ -277,6 +287,8 @@ export default function Payments() {
     setCreating(true);
     const token = localStorage.getItem('token');
   fetch(`${BACKEND_URL}/api/payments`, {
+  // fetch(`/api/payments`, {
+
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -328,6 +340,8 @@ export default function Payments() {
       return;
     }
   const res = await fetch(`${BACKEND_URL}/api/razorpay/order`, {
+  // const res = await fetch(`/api/razorpay/order`, {
+
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -349,7 +363,9 @@ export default function Payments() {
       description: 'Payment',
       handler: function (response) {
         toast.success('Payment successful! Payment ID: ' + response.razorpay_payment_id);
-  fetch(`${BACKEND_URL}/api/payments`, {
+  // fetch(`${BACKEND_URL}/api/payments`, {
+  fetch(`/api/payments`, {
+
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

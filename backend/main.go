@@ -20,7 +20,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"github.com/gin-contrib/cors" 
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -219,7 +220,13 @@ func main() {
 	}
 
 	r := gin.Default()
-	r.Use(cors.Default())
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"https://smart-bill-ietm.vercel.app", "http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 	// AI Categorization endpoint (calls external Python AI microservice)
 	r.POST("/api/ai/categorize", func(c *gin.Context) {
 		var req struct {
