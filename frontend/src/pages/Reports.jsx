@@ -23,9 +23,7 @@ export default function Reports() {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ type: 'all', category: 'all', start: '', end: '' });
   const [stats, setStats] = useState({});
-
-  // --- Savings, Trends, and Tips logic (must be after state) ---
-  const budget = 10000;
+  const [budget, setBudget] = useState(10000);
   const now = new Date();
   const thisMonth = now.getMonth() + 1;
   const thisYear = now.getFullYear();
@@ -70,17 +68,24 @@ export default function Reports() {
     async function fetchData() {
       setLoading(true);
       const token = localStorage.getItem('token');
-  const API_URL = import.meta.env.VITE_BACKEND_URL;
-      const [expRes, payRes] = await Promise.all([
-         fetch(`${API_URL}/api/expenses`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } }),
-         fetch(`${API_URL}/api/payments`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } })
-        //         fetch(`/api/expenses`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } }),
-        // fetch(`/api/payments`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } })
+      const API_URL = import.meta.env.VITE_BACKEND_URL;
+      const [expRes, payRes, budgetRes] = await Promise.all([
+        fetch(`${API_URL}/api/expenses`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } }),
+        fetch(`${API_URL}/api/payments`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } }),
+        fetch(`${API_URL}/api/user/budget`, { headers: { 'Authorization': token ? `Bearer ${token}` : undefined } })
       ]);
       const expArr = await expRes.json();
       const payArr = await payRes.json();
+      let userBudget = 10000;
+      try {
+        const budgetData = await budgetRes.json();
+        if (budgetData && typeof budgetData.budget === 'number') {
+          userBudget = budgetData.budget;
+        }
+      } catch {}
       setExpensesData(expArr);
       setPaymentsData(payArr);
+      setBudget(userBudget);
       setLoading(false);
     }
     fetchData();
